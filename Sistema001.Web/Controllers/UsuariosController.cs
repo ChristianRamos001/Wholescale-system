@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Sistema001.Datos;
 using Sistema001.Entidades.Usuarios;
+using Sistema001.Web.Models.Usuarios;
 using Sistema001.Web.Models.Usuarios.Usuario;
 
 namespace Sistema001.Web.Controllers
@@ -263,12 +264,21 @@ namespace Sistema001.Web.Controllers
             return Ok(
                     new { token = GenerarToken(claims) }
                 );
-      
-
         }
+
+        // GET: api/Usuarios/Conexion
+        [HttpGet("[action]")]
+        public async Task<IActionResult> Conexion()
+        {
+            return new OkObjectResult(new Item { Id = 123, Name = "Heroé lo has echo" });
+        }
+
+
+
 
         private bool VerificarPasswordHash(string password, byte[] passwordHashAlmacenado, byte[] passwordSalt)
         {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
             {
                 var passwordHashNuevo = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 return new ReadOnlySpan<byte>(passwordHashAlmacenado).SequenceEqual(new ReadOnlySpan<byte>(passwordHashNuevo));
